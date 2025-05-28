@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="./style.css">
+    <title>SavdoZone</title>
+</head>
+<body>
+    <header>
+        <nav class="row-header">
+            <div class="logo" aria-label="SavdoZone logotipi">
+                <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="#e6e6ff"/>
+                    <path d="M30 70 L70 70 L65 40 L35 40 Z" fill="#6b4eff"/>
+                    <circle cx="40" cy="80" r="5" fill="#6b4eff"/>
+                    <circle cx="60" cy="80" r="5" fill="#6b4eff"/>
+                    <path d="M50 30 L60 45 L40 45 Z" fill="#ffffff"/>
+                </svg>
+                <h1>SavdoZone</h1>
+            </div>
+            <input type="text" id="search-input" placeholder="Mahsulot qidirish..." oninput="searchProducts()" aria-label="Mahsulot qidirish maydoni">
+            <div class="profile-icon" onclick="showSection('profile-section')" aria-label="Profilni ko‘rsatish">
+                👤 <span id="profile-name-header">Kirish</span>
+            </div>
+            <div class="cart-icon" onclick="showSection('cart-section')" aria-label="Savatchani ko‘rsatish">
+                🛒 <span class="cart-counter" id="cart-count">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <nav>
+            <button onclick="filterCategory('all')" class="active" aria-label="Barcha mahsulotlar ro'yxatini ko‘rsatish">Barchasi</button>
+            <button onclick="filterCategory('oziq')" aria-label="Oziq-ovqat mahsulotlarini ko‘rsatish">Oziq-ovqat</button>
+            <button onclick="filterCategory('kiyimlar')" aria-label="Kiyimlar mahsulotlarini ko‘rsatish">Kiyimlar</button>
+            <button onclick="filterCategory('poyabzallar')" aria-label="Poyabzallar mahsulotlarini ko‘rsatish">Poyabzallar</button>
+            <button onclick="filterCategory('elektronika')" aria-label="Elektronika mahsulotlarini ko‘rsatish">Elektronika</button>
+            <button onclick="filterCategory('ovqatlar')" aria-label="Ovqatlar mahsulotlarini ko‘rsatish">Ovqatlar</button>
+        </nav>
+
+        <section id="products-section">
+            <div id="products-grid"></div>
+        </section>
+
+        <section id="cart-section" style="display: none;">
+            <h2 id="cart-title">Savatcha</h2>
+            <div id="cart-items"></div>
+            <p class="total" id="cart-total">Jami: 0 so‘m</p>
+            <button onclick="showSection('checkout-section')" id="proceed-to-checkout" disabled aria-label="Buyurtma berishga o‘tish">Oformit</button>
+        </section>
+
+        <section id="profile-section" style="display: none;">
+            <h2 id="profile-title">Profil</h2>
+            <div class="form-group">
+                <label for="name">Ism</label>
+                <input type="text" id="name" placeholder="Ismingizni kiriting" aria-label="Ismni kiriting">
+                <div class="error" id="name-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="surname">Familiya</label>
+                <input type="text" id="surname" placeholder="Familiyangizni kiriting" aria-label="Familiyani kiriting">
+                <div class="error" id="surname-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="phone">Telefon raqami</label>
+                <input type="tel" id="phone" placeholder="+998XXXXXXXXX" aria-label="Telefon raqamini kiriting" oninput="sendSMSCode('phone', 'phone-sms-error')">
+                <div class="error" id="phone-error"></div>
+                <input type="text" id="phone-sms" placeholder="SMS kodni kiriting" aria-label="SMS kodni kiriting" style="margin-top: 8px;">
+                <div class="error" id="phone-sms-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="address">Toshkent tumani</label>
+                <select id="address" aria-label="Toshkent tumanini tanlang">
+                    <option value="" disabled selected>Tuman tanlang</option>
+                    <option value="Bektemir">Bektemir</option>
+                    <option value="Chilanzar">Chilanzar</option>
+                    <option value="Mirzo Ulugbek">Mirzo Ulugbek</option>
+                    <option value="Sergeli">Sergeli</option>
+                    <option value="Shaykhontohur">Shaykhontohur</option>
+                    <option value="Olmazor">Olmazor</option>
+                    <option value="Uchtepa">Uchtepa</option>
+                    <option value="Yashnobod">Yashnobod</option>
+                    <option value="Yunusobod">Yunusobod</option>
+                    <option value="Yakkasaroy">Yakkasaroy</option>
+                    <option value="Mirobod">Mirobod</option>
+                    <option value="Yangihayot">Yangihayot</option>
+                    <option value="Zangiota">Zangiota</option>
+                    <option value="Qibray">Qibray</option>
+                    <option value="Parkent">Parkent</option>
+                    <option value="Pskent">Pskent</option>
+                    <option value="Oqqorgon">Oqqorgon</option>
+                    <option value="Chinoz">Chinoz</option>
+                    <option value="Yangiyol">Yangiyol</option>
+                    <option value="Ohangaron">Ohangaron</option>
+                    <option value="Bo‘stonliq">Bo‘stonliq</option>
+                    <option value="Toshkent tumani">Toshkent tumani</option>
+                    <option value="Yuqorichirchiq">Yuqorichirchiq</option>
+                    <option value="Ortachirchiq">Ortachirchiq</option>
+                    <option value="Quyichirchiq">Quyichirchiq</option>
+                    <option value="Bo‘ka">Bo‘ka</option>
+                </select>
+                <div class="error" id="address-error"></div>
+            </div>
+            <button onclick="saveProfile()" aria-label="Profilni saqlash">Saqlash</button>
+        </section>
+
+        <section id="checkout-section" style="display: none;">
+            <h2 id="checkout-title">Buyurtma berish</h2>
+            <div id="order-summary"></div>
+            <div class="form-group">
+                <label for="name-checkout">Ism</label>
+                <input type="text" id="name-checkout" placeholder="Ismingizni kiriting" aria-label="Ismni kiriting">
+                <div class="error" id="name-checkout-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="surname-checkout">Familiya</label>
+                <input type="text" id="surname-checkout" placeholder="Familiyangizni kiriting" aria-label="Familiyani kiriting">
+                <div class="error" id="surname-checkout-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="phone-checkout">Telefon raqami</label>
+                <input type="tel" id="phone-checkout" placeholder="+998XXXXXXXXX" aria-label="Telefon raqamini kiriting" oninput="sendSMSCode('phone-checkout', 'phone-checkout-sms-error')">
+                <div class="error" id="phone-checkout-error"></div>
+                <input type="text" id="phone-checkout-sms" placeholder="SMS kodni kiriting" aria-label="SMS kodni kiriting" style="margin-top: 8px;">
+                <div class="error" id="phone-checkout-sms-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="address-checkout">Toshkent tumani</label>
+                <select id="address-checkout" aria-label="Toshkent tumanini tanlang">
+                    <option value="" disabled selected>Tuman tanlang</option>
+                    <option value="Bektemir">Bektemir</option>
+                    <option value="Chilanzar">Chilanzar</option>
+                    <option value="Mirzo Ulugbek">Mirzo Ulugbek</option>
+                    <option value="Sergeli">Sergeli</option>
+                    <option value="Shaykhontohur">Shaykhontohur</option>
+                    <option value="Olmazor">Olmazor</option>
+                    <option value="Uchtepa">Uchtepa</option>
+                    <option value="Yashnobod">Yashnobod</option>
+                    <option value="Yunusobod">Yunusobod</option>
+                    <option value="Yakkasaroy">Yakkasaroy</option>
+                    <option value="Mirobod">Mirobod</option>
+                    <option value="Yangihayot">Yangihayot</option>
+                    <option value="Zangiota">Zangiota</option>
+                    <option value="Qibray">Qibray</option>
+                    <option value="Parkent">Parkent</option>
+                    <option value="Pskent">Pskent</option>
+                    <option value="Oqqorgon">Oqqorgon</option>
+                    <option value="Chinoz">Chinoz</option>
+                    <option value="Yangiyol">Yangiyol</option>
+                    <option value="Ohangaron">Ohangaron</option>
+                    <option value="Bo‘stonliq">Bo‘stonliq</option>
+                    <option value="Toshkent tumani">Toshkent tumani</option>
+                    <option value="Yuqorichirchiq">Yuqorichirchiq</option>
+                    <option value="Ortachirchiq">Ortachirchiq</option>
+                    <option value="Quyichirchiq">Quyichirchiq</option>
+                    <option value="Bo‘ka">Bo‘ka</option>
+                </select>
+                <div class="error" id="address-checkout-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="payment-method">To‘lov usuli</label>
+                <select id="payment-method" aria-label="To‘lov usulini tanlang" onchange="toggleCardInput()">
+                    <option value="" disabled selected>To‘lov usulini tanlang</option>
+                    <option value="cash">Naqd</option>
+                    <option value="card">Karta</option>
+                </select>
+                <div class="error" id="payment-method-error"></div>
+            </div>
+            <div class="form-group" id="card-details" style="display: none;">
+                <label for="card-number">Karta raqami</label>
+                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" aria-label="Karta raqamini kiriting">
+                <div class="error" id="card-number-error"></div>
+                <label for="card-expiry">Amal qilish muddati (MM/YY)</label>
+                <input type="text" id="card-expiry" placeholder="MM/YY" aria-label="Karta amal qilish muddatini kiriting" style="margin-top: 8px;">
+                <div class="error" id="card-expiry-error"></div>
+                <label for="card-cvv">CVV</label>
+                <input type="text" id="card-cvv" placeholder="123" aria-label="Karta CVV kodini kiriting" style="margin-top: 8px;">
+                <div class="error" id="card-cvv-error"></div>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="terms-agree" aria-label="Shartlarga roziman"> Shartlarga roziman
+                </label>
+                <div class="error" id="terms-agree-error"></div>
+            </div>
+            <button onclick="submitOrder()" aria-label="Buyurtmani yuborish">Yuborish</button>
+        </section>
+
+        <div id="order-confirmation-modal" class="modal">
+            <div class="modal-content">
+                <h2>Buyurtma tasdiqlandi</h2>
+                <p id="order-code"></p>
+                <p id="order-details"></p>
+                <button onclick="closeModal()" aria-label="Modalni yopish">Yopish</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <span id="footer-logo-text">SavdoZone</span>
+            </div>
+            <div class="footer-contact">
+                <h4 id="footer-contact-title">Biz bilan bog‘laning</h4>
+                <p id="footer-phone">Telefon: +998 71 123 45 67</p>
+                <p id="footer-email">Email: info@savdozone.uz</p>
+                <p id="footer-address">Manzil: Toshkent sh., Chilanzar tumani, 45-kvartal</p>
+            </div>
+            <div class="footer-links">
+                <h4 id="footer-links-title">Tezkor havolalar</h4>
+                <ul>
+                    <li><a href="#" onclick="showSection('products-section')" id="footer-link-products" aria-label="Mahsulotlar sahifasiga o‘tish">Mahsulotlar</a></li>
+                    <li><a href="#" onclick="showSection('cart-section')" id="footer-link-cart" aria-label="Savatcha sahifasiga o‘tish">Savatcha</a></li>
+                    <li><a href="#" onclick="showSection('profile-section')" id="footer-link-profile" aria-label="Profil sahifasiga o‘tish">Profil</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p id="footer-copyright">© 2025 SavdoZone. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+    <script defer src="./script.js"></script>
+
+</body>
+</html>
